@@ -127,6 +127,7 @@ def vote(request, question_id):
         return redirect('index')
 
     question = get_object_or_404(Question, pk=question_id)
+    questions = Question.objects.all()
     choice_id = request.POST.get('choice')
 
     if not choice_id:
@@ -134,6 +135,7 @@ def vote(request, question_id):
         return render(request, "poll/index.html", {
             "questions": questions,
             "error_message": "Please select a choice",
+            "message_type": "error",
             "error_question_id": question.id
         })
 
@@ -143,6 +145,7 @@ def vote(request, question_id):
         return render(request, "poll/index.html", {
             "questions": questions,
             "error_message": "You have already voted for this question",
+            "message_type": "error",
             "error_question_id": question.id
         })
 
@@ -157,6 +160,11 @@ def vote(request, question_id):
     selected_choice.votes += 1
     selected_choice.save()
 
-    messages.success(request, "Vote submitted successfully")
-
-    return redirect('index')
+    # success message under same question
+    return render(request, "poll/index.html", {
+        "questions": questions,
+        "error_message": "Vote submitted successfully",
+        "message_type": "success",
+        "error_question_id": question.id,
+        "success" : "200"
+    })
