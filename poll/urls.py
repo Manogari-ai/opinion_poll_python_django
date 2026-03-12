@@ -25,4 +25,7 @@ urlpatterns = [
     path('api/questions/', views.question_list_api),
 
     path('api/vote/', views.vote_api),
+
+    path('api/login/', views.login_api),
+    path('api/register/', views.register_api),
 ]

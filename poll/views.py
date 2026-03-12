@@ -46,7 +46,48 @@ def vote_api(request):
     except Choice.DoesNotExist:
         return Response({"error": "Choice not found"})
 
+@api_view(['POST'])
+def login_api(request):
 
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response({'error':'User not found'})
+
+    user = authenticate(username=user.username,password=password)
+
+    if user is not None:
+        return Response({
+            "user_id": user.id,
+            "email": user.email
+        })
+
+    return Response({"error":"Invalid password"})
+@api_view(['POST'])
+def register_api(request):
+
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    if User.objects.filter(email=email).exists():
+        return Response({'error':'Email already exists'})
+
+    username = email.split('@')[0]
+
+    user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password
+    )
+
+    return Response({
+        "message": "Register success",
+        "user_id": user.id,
+        "email": user.email
+    })
 # LOGIN
 def custom_login(request):
 
