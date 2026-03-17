@@ -52,12 +52,15 @@ def login_api(request):
     email = request.data.get('email')
     password = request.data.get('password')
 
+    if not email or not password:
+        return Response({'error':'Email and password required'})
+
     try:
-        user = User.objects.get(email=email)
+        user_obj = User.objects.get(email=email)
     except User.DoesNotExist:
         return Response({'error':'User not found'})
 
-    user = authenticate(username=user.username,password=password)
+    user = authenticate(username=user_obj.username, password=password)
 
     if user is not None:
         return Response({
@@ -65,7 +68,9 @@ def login_api(request):
             "email": user.email
         })
 
-    return Response({"error":"Invalid password"})
+    return Response({'error':'Invalid password'})
+
+
 @api_view(['POST'])
 def register_api(request):
 

@@ -12,7 +12,12 @@ from . import views
 from django.contrib.auth import views as auth_views
 urlpatterns = [
 
-    path('', views.index, name='index'),
+     # Root redirects to login
+    path('', views.custom_login, name='login'),
+
+    # After login, users go here
+    path('index/', views.index, name='index'),
+
 
     path('vote/<int:question_id>/', views.vote, name='vote'),
 

@@ -1,0 +1,31 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+
+<h2>Vote Results Chart</h2>
+
+<canvas id="voteChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+var labels = {{ labels|safe }};
+var votes = {{ votes|safe }};
+
+new Chart(document.getElementById("voteChart"), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Votes',
+            data: votes
+        }]
+    }
+});
+
+</script>
+
+{{ block.super }}
+
+{% endblock %}

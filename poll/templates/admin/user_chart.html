@@ -1,0 +1,29 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+
+<h2>User Vote History (Line Chart)</h2>
+
+<canvas id="userChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('userChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ users|safe }},
+            datasets: [{
+                label: 'Votes per User',
+                data: {{ votes|safe }},
+                borderWidth: 2
+            }]
+        }
+    });
+</script>
+
+{{ block.super }}
+
+{% endblock %}
