@@ -8,16 +8,23 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- ✅ Safe JSON data -->
+{{ users|json_script:"users-data" }}
+{{ votes|json_script:"votes-data" }}
+
 <script>
+    const users = JSON.parse(document.getElementById('users-data').textContent);
+    const votes = JSON.parse(document.getElementById('votes-data').textContent);
+
     const ctx = document.getElementById('userChart');
 
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{ users|safe }},
+            labels: users,
             datasets: [{
                 label: 'Votes per User',
-                data: {{ votes|safe }},
+                data: votes,
                 borderWidth: 2
             }]
         }
